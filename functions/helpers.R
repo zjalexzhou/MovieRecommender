@@ -79,3 +79,75 @@ appCSS <- "
   color: red;
 }
 "
+
+# =============================================
+
+# for system I: recommend movies by genre
+
+# Function to find the closest matching genre
+find_closest_genre <- function(user_input, genre_list) {
+  distances <- stringdist::stringdistmatrix(tolower(user_input), tolower(genre_list), method = "jaccard")
+  closest_index <- which.min(distances)
+  closest_genre <- genre_list[closest_index]
+  return(closest_genre)
+}
+
+
+# =============================================
+
+# for system II: recommend movies by user-input ratings
+get_user_ratings = function(value_list) {
+  
+  # Filter out entries without "select_"
+  filtered_entries <- value_list[startsWith(names(value_list), "select_")]
+  
+  # Create movie IDs for the two ranges
+  movie_ids_range1 <- paste0("m", 1:91)
+  movie_ids_range2 <- paste0("m", 93:121)
+  
+  # Combine the two ranges
+  movie_ids <- c(movie_ids_range1, movie_ids_range2)
+  
+  # Extract ratings
+  ratings <- sapply(filtered_entries, function(x) as.numeric(str_extract(x, "\\d+")))
+  
+  # Combine movie IDs and ratings into a data frame
+  movie_data <- data.frame(movie_id = unlist(movie_ids), rating = unlist(ratings))
+  
+  newuser_data <- movie_id_join %>% left_join(movie_data, by = c("MovieID"="movie_id"))
+  
+  # print(newuser_data)
+  
+  return(newuser_data)
+}
+
+my_IBCF <- function(newuser, SS){
+  # Initialize a vector to store predictions
+  
+  for (l in 1:length(newuser)) {
+    
+    # Skip movies that the new user has already rated
+    if (!is.na(newuser[l])) {
+      next
+    }
+    # Calculate the prediction for movie l
+    numerator <- sum(SS[,l] * newuser, na.rm = TRUE)
+    denominator <- sum(SS[,l], na.rm = TRUE)
+    
+    # Update the predictions vector
+    predictions[l] <- ifelse(denominator != 0, numerator / denominator, NA)
+  }
+  # Get the indices of the top ten predictions
+  top_indices <- order(predictions, decreasing = TRUE)[1:10]
+  recommended_movies <- data.frame()
+  
+  # Recommend the top 10 movies
+  # Populate the data frame with names and scores
+  recommended_movies <- data.frame(
+    name = colnames(Rmat)[top_indices],
+    score = predictions[top_indices]
+  )
+  
+  return(recommended_movies)
+}
+

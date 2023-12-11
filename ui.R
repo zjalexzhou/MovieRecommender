@@ -1,4 +1,5 @@
 ## ui.R
+
 library(shiny)
 library(shinydashboard)
 library(recommenderlab)
@@ -6,8 +7,6 @@ library(data.table)
 library(ShinyRatingInput)
 library(shinyjs)
 library(shinythemes)
-
-
 
 source('functions/helpers.R')
 # 
@@ -44,7 +43,7 @@ shinyUI(
         tabName = 'home',
         fluidRow(
           box(width = 12,
-                 h2("Your Personalized Movie Recommednation Syste at One-Click"),
+                 h2("Your Personalized Movie Recommednation System at One-Click"),
                  p("Please choose a dashboard from the menu."),
                  p("System I: Allow users to input their favorite movie genre. 
                    Provide 10 movie recommendations based on the user’s selected genre."),
@@ -53,6 +52,7 @@ shinyUI(
                 Display 10 movie recommendations for the user based on their ratings."),
               br(),
               p("Developed by Yilun Zhao (yilun3@illinois.edu) and Zhijie 'ZJ' Zhou (zhijiez2@illinois.edu)"),
+              p("STATS 542, Fall 2023"),
           )
         )
       ),
@@ -66,8 +66,10 @@ shinyUI(
            br(),
            textInput("genreInput", "Enter Movie Genre:", placeholder = "e.g., Action"),
            withBusyIndicatorUI(
-             actionButton("submitGenre", "Submit Genre")
+             actionButton("submitGenre", "Submit Genre", status = 'info')
            ),
+           br(),
+           verbatimTextOutput("result_message"),
            br(),
            tableOutput("results1")
            )
