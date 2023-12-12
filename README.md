@@ -5,3 +5,9 @@ This is code for a shiny app for a movie recommender based on item-based collabo
 By Yilun Zhao & Zhijie Zhou.
 STAT 542: Practical Statistics Learning, Fall 2023
 
+System I: Allow users to input their favorite movie genre. Provide 10 movie recommendations based on the user’s selected genre.
+
+System II: Present users with a set of sample movies and ask them to rate them. Use the ratings provided by the user as input for your myIBCF function. Display 10 movie recommendations for the user based on their ratings.
+
+[update] Dec 11th 8pm
+We seemed to face some issues with deployment. The app would drop connection in a few seconds you open the web link.
