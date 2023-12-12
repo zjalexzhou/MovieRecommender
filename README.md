@@ -13,3 +13,6 @@ System II: Present users with a set of sample movies and ask them to rate them. 
 
 [update] Dec 11th 8pm
 We seemed to face some issues with deployment. The app would drop connection in a few seconds you open the web link.
+
+**Run app.R** for local deployment after download and unzip the file associated with the repo.
+
