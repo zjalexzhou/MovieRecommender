@@ -50,7 +50,7 @@ SSS <- SSS[, -1]
 movie_id_list <- colnames(Rmat)
 movie_id_join <- data.frame(MovieID = movie_id_list,
                             stringsAsFactors = FALSE)
-
+gc()
 # ===============
 # server function
 shinyServer(function(input, output, session) {
@@ -86,7 +86,7 @@ shinyServer(function(input, output, session) {
         # Find the closest matching genre
         user_genre <- find_closest_genre(input$genreInput, genres)
         shinyjs::enable("result_message")  # Enable the message
-        shinyjs::html("result_message", "Invalid input. Showing closest match.")
+        shinyjs::html("result_message", "If the genre you input is not availble, we'll recommend the closest genre movies.")
       }
       
       # # Print the closest matching genre
@@ -123,7 +123,7 @@ shinyServer(function(input, output, session) {
         )        
       }))) # columns
     }) # rows
-    
+
   }) # renderUI function  
   # Calculate recommendations when the sbumbutton is clicked
   df2 <- eventReactive(input$btn, {
