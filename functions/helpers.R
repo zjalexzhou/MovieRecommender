@@ -149,8 +149,6 @@ my_IBCF <- function(newuser, SS){
     name = colnames(Rmat)[top_indices],
     score = predictions[top_indices]
   )
-  
-  
   return(recommended_movies)
 }
 
