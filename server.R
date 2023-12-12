@@ -10,7 +10,7 @@ library(dplyr)
 #                           token='A6F9600021D632D67EA6AC25259F1D7E',
 #                           secret='IZBMOoxH4AuKVgiNDhkP/nzlZQPTWxlRJpGakcTU')
 # 
-# rsconnect::deployApp()
+# rsconnect::deployApp(forceUpdate = TRUE)
 
 # read in movie data
 myurl = "https://liangfgithub.github.io/MovieData/"
@@ -42,7 +42,7 @@ github_url <- "https://raw.githubusercontent.com/zjalexzhou/MovieRecommender/mas
 Rmat <- read.csv(github_url)
 
 # read in movie ratings similarity matrix
-github_url <- "https://raw.githubusercontent.com/zjalexzhou/MovieRecommender/master/movie_similarity_top30_1.csv"
+github_url <- "https://raw.githubusercontent.com/zjalexzhou/MovieRecommender/master/data/movie_similarity_top30.csv"
 SSS <- read.csv(github_url)
 rownames(SSS) <- SSS$X
 SSS <- SSS[, -1]
