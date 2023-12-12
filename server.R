@@ -5,12 +5,12 @@ library(stringr)
 library(stringdist)
 library(dplyr)
 
-# for app deployment on shiny.io
-rsconnect::setAccountInfo(name='alex-zhou-1013',
-                          token='A6F9600021D632D67EA6AC25259F1D7E',
-                          secret='IZBMOoxH4AuKVgiNDhkP/nzlZQPTWxlRJpGakcTU')
-
-rsconnect::deployApp('P:/Fall2023/STATS/proj4/MovieRecommender')
+# # for app deployment on shiny.io
+# rsconnect::setAccountInfo(name='alex-zhou-1013',
+#                           token='A6F9600021D632D67EA6AC25259F1D7E',
+#                           secret='IZBMOoxH4AuKVgiNDhkP/nzlZQPTWxlRJpGakcTU')
+# 
+# rsconnect::deployApp()
 
 # read in movie data
 myurl = "https://liangfgithub.github.io/MovieData/"
@@ -21,28 +21,10 @@ movies = data.frame(movies, stringsAsFactors = FALSE)
 colnames(movies) = c('MovieID', 'Title', 'Genres')
 movies$MovieID = as.integer(movies$MovieID)
 movies$Title = iconv(movies$Title, "latin1", "UTF-8")
-
 small_image_url = "https://liangfgithub.github.io/MovieImages/"
 movies$image_url = sapply(movies$MovieID, 
                           function(x) paste0(small_image_url, x, '.jpg?raw=true'))
 
-# read in movie ratings similarity matrix
-github_url <- "https://raw.githubusercontent.com/zjalexzhou/MovieRecommender/master/movie_similarity_top30_1.csv"
-SSS <- read.csv(github_url)
-rownames(SSS) <- SSS$X
-SSS <- SSS[, -1]
-
-movie_id_list <-  colnames(Rmat)
-movie_id_join <- data.frame(MovieID = movie_id_list,
-                            stringsAsFactors = FALSE)
-
-# similarityMatrix <- data.frame(read.csv("P:/Fall2023/STATS/proj4/similarityMatrix.csv"))
-rownames(similarityMatrix) <- similarityMatrix$X
-SM <- similarityMatrix %>% dplyr::select(-X)
-
-# read in movie recommendation by genre data
-github_url <- "https://raw.githubusercontent.com/zjalexzhou/MovieRecommender/master/data/genre-recommendations.csv"
-genre_final <- read.csv(github_url)
 # List of genres
 genres = c("Action", "Adventure", "Animation", 
            "Children's", "Comedy", "Crime",
@@ -51,6 +33,26 @@ genres = c("Action", "Adventure", "Animation",
            "Mystery", "Romance", "Sci-Fi", 
            "Thriller", "War", "Western")
 
+# read in movie recommendation by genre data
+github_url <- "https://raw.githubusercontent.com/zjalexzhou/MovieRecommender/master/data/genre-recommendations.csv"
+genre_final <- read.csv(github_url)
+
+# read in movie ratings data
+github_url <- "https://raw.githubusercontent.com/zjalexzhou/MovieRecommender/master/data/Rmat.csv"
+Rmat <- read.csv(github_url)
+
+# read in movie ratings similarity matrix
+github_url <- "https://raw.githubusercontent.com/zjalexzhou/MovieRecommender/master/movie_similarity_top30_1.csv"
+SSS <- read.csv(github_url)
+rownames(SSS) <- SSS$X
+SSS <- SSS[, -1]
+
+movie_id_list <- colnames(Rmat)
+movie_id_join <- data.frame(MovieID = movie_id_list,
+                            stringsAsFactors = FALSE)
+
+# ===============
+# server function
 shinyServer(function(input, output, session) {
   
   # show the books to be rated
@@ -136,10 +138,13 @@ shinyServer(function(input, output, session) {
         
         user_movie_input <- get_user_ratings(value_list2)
         
+        # print("user_movie_input")
+        # print(user_movie_input)
+        
         # print(value_list2)
         user_rated <- user_movie_input$MovieID
-        user_ratings <- user_movie_input$ratings
-        # print(user_ratings)
+        user_ratings <- user_movie_input$rating
+
         # print(value_list)
         user_predicted_ids <- my_IBCF(user_ratings, SSS)$name
         

@@ -1,0 +1,10 @@
+name: movierecommender
+title:
+username: alex-zhou-1013
+account: alex-zhou-1013
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10777242
+bundleId: 8037639
+url: https://alex-zhou-1013.shinyapps.io/movierecommender/
+version: 1

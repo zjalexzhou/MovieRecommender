@@ -113,16 +113,15 @@ get_user_ratings = function(value_list) {
   
   # Combine movie IDs and ratings into a data frame
   movie_data <- data.frame(movie_id = unlist(movie_ids), rating = unlist(ratings))
-  
+  # print(movie_data)
   newuser_data <- movie_id_join %>% left_join(movie_data, by = c("MovieID"="movie_id"))
-  
   # print(newuser_data)
-  
   return(newuser_data)
 }
 
 my_IBCF <- function(newuser, SS){
   # Initialize a vector to store predictions
+  predictions <- rep(NA, length(newuser))
   
   for (l in 1:length(newuser)) {
     
@@ -139,6 +138,9 @@ my_IBCF <- function(newuser, SS){
   }
   # Get the indices of the top ten predictions
   top_indices <- order(predictions, decreasing = TRUE)[1:10]
+  
+  # print(top_indices)
+  
   recommended_movies <- data.frame()
   
   # Recommend the top 10 movies
@@ -147,6 +149,7 @@ my_IBCF <- function(newuser, SS){
     name = colnames(Rmat)[top_indices],
     score = predictions[top_indices]
   )
+  
   
   return(recommended_movies)
 }
